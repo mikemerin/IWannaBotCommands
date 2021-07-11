@@ -1,0 +1,21 @@
+/*
+--testing out timers--
+*/
+
+Alias gggg {
+  msg $chan GOOOO
+}
+
+Alias hhhh {
+  var %reps = 5
+  /timernext 0 5 #gggg
+  gggg
+}
+
+on *:TEXT:rg:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    msg $chan hit
+    ;    /timergame 0 2 $gggg
+    hhhh
+  }
+}

@@ -1,0 +1,250 @@
+/*
+--this is a JS reference meant to be used as an example for the Twitch on-screen game played app by Patrickgh3.--
+--TODO in the future to convert this to MSL--
+*/
+
+fetch('https://cwpat.me:4464/setgame', {
+  		method: 'post',
+  		headers: {
+    			'Host': 'cwpat.me:4464',
+    			'Connection': 'keep-alive',
+    			'Content-Length': '26',
+    			'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjU2NDM3ODQsIm9wYXF1ZV91c2VyX2lkIjoiVVdha2FfOEh5V24ybnBZbTlRLWFNIiwidXNlcl9pZCI6IjQ2ODU4NjYwIiwiY2hhbm5lbF9pZCI6IjQ3MTYyNjc2Iiwicm9sZSI6Im1vZGVyYXRvciIsInB1YnN1Yl9wZXJtcyI6eyJsaXN0ZW4iOlsiYnJvYWRjYXN0Iiwid2hpc3Blci1VV2FrYV84SHlXbjJucFltOVEtYU0iXX19.yjRL6Wvzu_qmXo4qr-NoEDM6J7JWkxrwgpHk_dQu_kM',
+    			'Origin': 'https://tirqrgy7bg0rz4sgyiciy1x8uu4cwh.ext-twitch.tv',
+    			'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36',
+    			'Content-type': 'application/json',
+    			'Accept': '*/*',
+    			'Referer': 'https://tirqrgy7bg0rz4sgyiciy1x8uu4cwh.ext-twitch.tv/tirqrgy7bg0rz4sgyiciy1x8uu4cwh/0.2.0/627bb689e6d950096ad9e16d73491463/viewer.html?anchor=video_overlay&language=en&mode=viewer&state=released&platform=web',
+    			'Accept-Encoding': 'gzip, deflate, br',
+    			'Accept-Language': 'en-US,en;q=0.9'
+    		},
+  		body: {'gamename': 'fgm'}
+}).then(r => r.json()).then(x => console.log(x))
+
+/*
+--old command, no longer used. !game covers this instead--
+*/
+
+on *:TEXT:!current *:*: {
+  set %url https://horaro.org/-/api/v1/schedules/3e11t8e3x52bgh7a8d
+  /JSONOpen -ud schedule %url
+  var %game = $JSON(schedule, data, items, $2 $+, data, 0)
+  var %type = $JSON(schedule, data, items, $2 $+, data, 1)
+  var %name = $JSON(schedule, data, items, $2 $+, data, 3)
+  ;  msg $chan Current run: %game %type by %name
+  $regex(game, %game, /\[(.*?)\]/)
+  if ($regml(game, 0) > 0) {
+    set %game_parsed $regml(game, 1)
+    ;      $regex(link, %game, /\](\(.+\))/)
+    ;      set %game_parsed %game_parsed $regml(link, 1)
+  }
+  else {
+    set %game_parsed %game
+  }
+  $regex(name, %name, /\[(.*?)\]/g)
+  if ($regml(name, 0) > 1) {
+    $regex(link, %name, /\((.*?)\)/g)
+    set %names $regml(name, 0) + 1
+    set %pos 1
+    set %name_parsed
+    while (%pos < %names) {
+      set %name_parsed %name_parsed $regml(name, %pos)
+      set %name_parsed %name_parsed $regml(link, %pos)
+      set %sum %names - %pos
+      if (%sum == 2) {
+        set %name_parsed %name_parsed and
+      }
+      set %pos %pos + 1
+    }
+  }
+  else if ($regml(name, 0) > 0) {
+    $regex(link, %name, /\((.*?)\)/)
+    set %name_parsed $regml(name, 1)
+    set %name_parsed %name_parsed $regml(link, 1)
+  }
+  else {
+    set %name_parsed %name
+  }
+  msg $chan Current run: %game_parsed %type by %name_parsed
+}
+
+
+
+
+/*
+--Needle Maker Voting System--
+*/
+
+on *:TEXT:!vote help:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    msg $chan /me (⌐■_■)つ v_create: creates the voting system. v_delete: deletes the voting system. v_reset: reset all votes. v_info [top|list|users]: top votes|list all votes|list all users with their votes. v_check [*user]: check a specific user's vote. v_start: start the voting. vote [x] [y]: vote!
+  }
+  else {
+    if (!%comwait) {
+      set -u10 %comwait 1
+      msg $chan /me (つ■_■)つ┌┬┐ When voting is open type "!vote [x] [y]" to vote!
+      msg $chan /me (つ■_■)つ├┼┤ These are the x and y coordinates of the room.
+      msg $chan /me (つ■_■)つ└┴┘ x must be between 1-25 and y between 1-19.
+    }
+  }
+}
+
+on *:TEXT:!v_create:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %v_open false
+    set %v_system true
+    hmake votes_x
+    hmake votes_y
+    hmake votes_u_x
+    hmake votes_u_y
+    msg $chan /me (⌐■_■)⌐ Voting system created.
+  }
+}
+
+on *:TEXT:!v_delete:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    unset %u*
+    unset %v_open
+    set %v_system false
+    hfree votes_x
+    hfree votes_y
+    hfree votes_u_x
+    hfree votes_u_y
+    msg $chan /me ( •_•)>⌐■-■ Voting system has been deleted.
+  }
+}
+
+on *:TEXT:!v_reset:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    unset %u*
+    set %v_open false
+    hfree votes_x
+    hfree votes_y
+    hfree votes_u_x
+    hfree votes_u_y
+    hmake votes_x
+    hmake votes_y
+    hmake votes_u_x
+    hmake votes_u_y
+    msg $chan /me (⌐■_■)⌐ The vote count has been reset to $var(%u.*) $+ .
+  }
+}
+
+on *:TEXT:!v_info *:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %num 0
+    if ($var(%u.*) == 0) {
+      msg $chan /me (⌐■﹏■) No one has voted yet.
+    }
+    else if ($2 == top) {
+      top_votes
+    }
+    else if ($2 == list) {
+      top_votes_list
+    }
+    else if ($2 == users) {
+      set %vote_list /me (⌐■_■)⌐ Total users that voted: $var(%u.*) -
+      while (%num < $var(%u.*)) {
+        %num = %num + 1
+        set %user $right($var(%u.*,%num),-3)
+        set %vote_list %vote_list %user ( $+ $hget( votes_u_x, %user ) $hget( votes_u_y, %user ) $+ )
+        if (%num < $var(%u.*)) { set %vote_list %vote_list $+ , }
+        unset %user
+      }
+      msg $chan %vote_list
+      unset %vote_list
+    }
+    unset %num
+  }
+}
+
+on *:TEXT:!v_check *:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    if ( %u. [ $+ [ $2 ] ] ) {
+      msg $chan /me (⌐■_■)⌐ %u. $+ $2 has voted $hget( votes_u_x, $2 ) $hget( votes_u_y, $2 )
+    }
+    else {
+      msg $chan /me (⌐■﹏■) %u. $+ $2 has not voted yet.
+    }
+  }
+}
+
+on *:TEXT:!v_start:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %v_open true
+    msg $chan /me (⌐■_■)⌐ Voting is open for 30 seconds! Type "vote X Y" to vote!
+    timer 1 10 msg $chan /me (⌐■_■)⌐ 20 seconds remaining!
+    timer 1 20 msg $chan /me (⌐■_■)⌐ 10 seconds remaining!
+    timer 1 25 msg $chan /me (⌐■_■)⌐ 5 seconds remaining!
+    timer 1 30 set %v_open false
+    timer 1 30 msg $chan /me (⌐■_■)⌐ Voting is now closed!
+  }
+}
+
+on *:TEXT:!vote *:*: {
+  if (%v_system == false) {
+    ;      msg $chan /me (⌐■﹏■) Sorry we're not voting now!
+  }
+  else if (%v_open == false) {
+    ;      msg $chan /me (⌐■﹏■) Sorry $nick voting is closed.
+  }
+  else if (%u. [ $+ [ $nick ] ] ) {
+    msg $chan /me (⌐■﹏■) Sorry $nick you already voted $hget( votes_u_x, $nick ) $hget( votes_u_y, $nick )
+  }
+  else if (($int( $2 ) == $2) && ($int( $3 ) == $3) && (0 < $2) && ( $2 < 26 ) && (0 < $3) && ( $3 < 20 )) {
+    set %u. $+ $nick true
+    hadd votes_u_x $nick $2
+    hadd votes_u_y $nick $3
+    if ($hget(votes_x, $2)) { set %num_x $hget(votes_x, $2) + 1 }
+    else { set %num_x 1 }
+    if ($hget(votes_y, $3)) { set %num_y $hget(votes_y, $3) + 1 }
+    else { set %num_y 1 }
+    hadd votes_x $2 %num_x
+    hadd votes_y $3 %num_y
+    unset %num_x
+    unset %num_y
+    msg $chan /me (⌐■_■)⌐ $nick voted x: $2 y: $3. Current vote(s): $var(%u.*) $+ .
+  }
+  else {
+    msg $chan /me (⌐■﹏■) $nick your vote must be two numbers: between 1-25 and 1-19. Please try again.
+  }
+}
+
+
+on *:TEXT:!v_start:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %v_open true
+    msg $chan /me (⌐■_■)⌐ Voting is open for 10 seconds! Type "vote X Y" to vote!
+    timer 1 5 msg $chan /me (⌐■_■)⌐ 5 seconds remaining!
+    timer 1 10 set %v_open false
+    timer 1 10 msg $chan /me (⌐■_■)⌐ Voting is now closed!
+  }
+}
+
+/*
+on *:TEXT:test *:*: {
+  if (%v_open == false) {
+    ;      msg $chan /me (⌐■﹏■) Sorry $nick voting is closed.
+  }
+  else if (%u. [ $+ [ $nick ] ] ) {
+    msg $chan /me (⌐■﹏■) Sorry $nick you already voted $hget( votes_u_x, $nick ) $hget( votes_u_y, $nick )
+  }
+  else if (($int( $2 ) == $2) && ($int( $3 ) == $3) && (0 < $2) && ( $2 < 26 ) && (0 < $3) && ( $3 < 20 )) {
+    set %u. $+ $4 true
+    hadd votes_u_x $4 $2
+    hadd votes_u_y $4 $3
+    if ($hget(votes_x, $2)) { set %num_x $hget(votes_x, $2) + 1 }
+    else { set %num_x 1 }
+    if ($hget(votes_y, $3)) { set %num_y $hget(votes_y, $3) + 1 }
+    else { set %num_y 1 }
+    hadd votes_x $2 %num_x
+    hadd votes_y $3 %num_y
+    unset %num_x
+    unset %num_y
+    msg $chan /me (⌐■_■)⌐ $4 voted x: $2 y: $3. Current vote(s): $var(%u.*) $+ .
+  }
+  else {
+    msg $chan /me (⌐■﹏■) $4 your vote must be two numbers: between 1-25 and 1-19. Please try again.
+  }
+}
+*/

@@ -1,0 +1,69 @@
+/*
+--Stonk / ChatranP--
+*/
+
+on *:TEXT:!ChatranP *:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon|| $nick == stonk) {
+    if ($2 == on) {
+      msg $chan  /me (⌐■_■)⌐ Get Ready
+      /timerchatran 0 1 msg $chan /me (⌐■_■)⌐ @ChatranP
+      } else {
+      /timerchatran off
+      msg $chan /me ( •_•)>⌐■-■ You ruined my fun :(
+    }
+  }
+}
+
+on *:TEXT:!set_urgh:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %urgh $2
+  }
+}
+
+on *:TEXT:!urgh:*: {
+  set %urgh %urgh + 1
+  msg $chan (⌐■_■)⌐ URGH
+}
+
+
+/*
+--Wolfiexe--
+*/
+
+on *:TEXT:!set_count *:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %bikes $2
+  }
+}
+
+on *:TEXT:!add_bike:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %bikes %bikes + 1
+    msg $chan (⌐■_■)⌐ Christ is on %bikes bikes
+  }
+}
+
+on *:TEXT:!christ:*: {
+  if (!%comwaitcommands) {
+    set -u15 %comwaitcommands 1
+    msg $chan (⌐■_■)⌐ on a bike
+  }
+}
+
+
+/*
+--krakkacafe--
+*/
+
+on *:TEXT:!set_burp *:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %burps $2
+  }
+}
+
+on *:TEXT:!burp:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon) {
+    set %burps %burps + 1
+    msg $chan /me (⌐■_■)⌐ Krakka burped %burps times
+  }
+}
