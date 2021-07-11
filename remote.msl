@@ -93,6 +93,9 @@ on *:TEXT:!repeat_fangame:*: {
 on *:TEXT:!update *:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == joshua_boring || $nick == wolsk || $nick == denferok || $nick == cakesauc3 || $nick == krakkacafe || $nick == piranhatooth || $nick == pieceofcheese87 || $nick == artardss || $nick == naloas || $nick == pandy49  || $nick == onychu) {
     set %url https://horaro.org/-/api/v1/schedules/3e11t8e3x52bgh7a8d/ticker
+    /*
+    TODO: make work again for previous/next
+    */
     /JSONOpen -ud schedule %url
     var %curr_game = $JSON(schedule, data, ticker, $2, data, 0)
     var %curr_type = $JSON(schedule, data, ticker, $2, data, 1)
