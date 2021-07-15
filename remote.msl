@@ -5,7 +5,14 @@
 on *:TEXT:!commands:*: {
   if (!%comwaitcommands) {
     set -u15 %comwaitcommands 1
-    msg $chan (⌐■_■)⌐ The commands you can use are: !fangame !discord !intro !jumps !game !schedule !next
+    msg $chan (⌐■_■)⌐ The commands you can use are: !discord !iwbtg !jumps !game !schedule !next !clip !social !twitter !youtube !yt
+  }
+}
+
+on *:TEXT:!help:*: {
+  if (!%comwaitcommands) {
+    set -u15 %comwaitcommands 1
+    msg $chan (⌐■_■)⌐ The commands you can use are: !discord !iwbtg !jumps !game !schedule !next !clip !social !twitter !youtube !yt
   }
 }
 
@@ -15,153 +22,110 @@ on *:TEXT:!commands:*: {
 */
 
 on *:TEXT:!repeat_on:*: {
+  ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
   if ($nick == shadowsdieaway || $nick == fangamemarathon) {
-    msg $chan /me (⌐■_■)⌐ Repeated commands loaded!
-    timer 1 5 rFollow
-    timer 1 20 rDiscord
-    timer 1 35 rIntro
-    timer 1 50 rFangame
+    msg $chan (⌐■_■)⌐ Repeated commands loaded!
+    timer 1 5 rClip
+    timer 1 455 rSocial
   }
 }
 
 on *:TEXT:!repeat_off:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon) {
-    /timerfollow off
-    /timerchatran off
-    /timerdiscord off
-    /timerintro off
-    /timerfangame off
-    /timerrepeat off
-    /timerschedule off
-    /timernext off
-    /timergame off
+    /timerclip off
+    /timersocial off
     msg $chan ( •_•)>⌐■-■ Repeated commands are now off.
   }
 }
 
-alias rFollow {
-  /timerfollow 0 660 msg $chan /me (⌐■_■)⌐ Enjoying the run? Be sure to follow the runner(s) by clicking the relevant FFZ follow buttons below the stream!
+alias rClip {
+  ;/timerclip 0 900 msg $chan (⌐■_■)⌐ If there's a great moment on stream, clip it and put it in our !Discord server. You will be credited if your clip makes it into the FM2021 highlight reel!
+  ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
+  /timerclip 0 900 msg #fangamemarathon (⌐■_■)⌐ If there's a great moment on stream, clip it and put it in our !Discord server. You will be credited if your clip makes it into the FM2021 highlight reel!
 }
 
-alias rDiscord {
-  /timerdiscord 0 840 msg $chan /me (⌐■_■)⌐ Join our Discord server! https://discord.gg/wW4axZp
-}
-
-alias rIntro {
-  /timersintro 0 1020 msg $chan /me (⌐■_■)⌐ New to IWBTG fangames and curious about what you're watching? Head over to https://fangam.es/intro for a nice overview!
-}
-
-alias rFangame {
-  /timerfangame 0 1140 msg $chan /me (⌐■_■)⌐ To download some fangames visit https://fangam.es and search our immense list of free games! To learn more about fangames type !intro
-}
-
-
-on *:TEXT:!repeat_follow:*: {
+on *:TEXT:!repeat_clip:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == iwannabot) {
-    msg $chan (⌐■_■)⌐ Enjoying the run? Be sure to follow the runner(s) by clicking the relevant FFZ follow buttons below the stream!
-    rFollow
-
+    ;msg $chan (⌐■_■)⌐ If there's a great moment on stream, clip it and put it in our !Discord server. You will be credited if your clip makes it into the FM2021 highlight reel!
+    ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
+    msg #fangamemarathon (⌐■_■)⌐ If there's a great moment on stream, clip it and put it in our !Discord server. You will be credited if your clip makes it into the FM2021 highlight reel!
+    rClip
   }
 }
 
-on *:TEXT:!repeat_discord:*: {
+alias rSocial {
+  ;/timersocial 0 900 msg $chan (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
+  ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
+  /timersocial 0 900 msg #fangamemarathon (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
+}
+
+on *:TEXT:!repeat_social:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == iwannabot) {
-    msg $chan (⌐■_■)⌐ Join our Discord server! https://discord.gg/wW4axZp
-    rDiscord
+    ;msg $chan (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
+    ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
+    msg #fangamemarathon (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
+    rSocial
   }
 }
 
-on *:TEXT:!repeat_intro:*: {
-  if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == iwannabot) {
-    msg $chan (⌐■_■)⌐ New to IWBTG fangames and curious about what you're watching? Head over to https://fangam.es/intro for a nice overview!
-    rIntro
-  }
-}
-
-on *:TEXT:!repeat_fangame:*: {
-  if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == iwannabot) {
-    msg $chan (⌐■_■)⌐ To download some fangames visit https://fangam.es and search our immense list of free games! To learn more about fangames type !intro
-    rFangame
-  }
-}
-
-
-/*
---Update FFZ Icons--
-*/
-
-on *:TEXT:!update *:*: {
-  if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == joshua_boring || $nick == wolsk || $nick == denferok || $nick == cakesauc3 || $nick == krakkacafe || $nick == piranhatooth || $nick == pieceofcheese87 || $nick == artardss || $nick == naloas || $nick == pandy49  || $nick == onychu) {
-    set %url https://horaro.org/-/api/v1/schedules/3e11t8e3x52bgh7a8d/ticker
-    /*
-    TODO: make work again for previous/next
-    */
-    /JSONOpen -ud schedule %url
-    var %curr_game = $JSON(schedule, data, ticker, $2, data, 0)
-    var %curr_type = $JSON(schedule, data, ticker, $2, data, 1)
-    var %curr_name = $JSON(schedule, data, ticker, $2, data, 3)
-
-    $regex(name, %curr_name, /twitch.tv/([a-zA-Z0-9|_]+)/g)
-
-    if ($regml(name, 0) > 1) {
-      $regex(link, %curr_name, /twitch.tv/([a-zA-Z0-9|_]+)/g)
-      set %names $regml(name, 0) + 1
-      set %pos 1
-      set %name_parsed
-      while (%pos < %names) {
-        set %name_parsed %name_parsed $regml(link, %pos)
-        set %sum %names - %pos
-        set %pos %pos + 1
-      }
-    }
-    else if ($regml(name, 0) > 0) {
-      $regex(link, %curr_name, /twitch.tv/([a-zA-Z0-9|_]+)/)
-      set %name_parsed $regml(link, 1)
-
-    }
-    else {
-      set %name_parsed %curr_name
-    }
-    msg $chan !ffzfollow %name_parsed
-  }
-}
 
 /*
 --General Commands--
 */
 
-on *:TEXT:!fangame:*: {
-  if (!%comwaitfangame) {
-    set -u15 %comwaitfangame 1
-    msg $chan (⌐■_■)⌐ To download some fangames visit https://fangam.es and search our immense list of free games! To learn more about fangames type !intro
-  }
-}
-
-on *:TEXT:!fangames:*: {
-  if (!%comwaitfangame) {
-    set -u15 %comwaitfangame 1
-    msg $chan (⌐■_■)⌐ To download some fangames visit https://fangam.es and search our immense list of free games! To learn more about fangames type !intro
-  }
-}
-
 on *:TEXT:!discord:*: {
-  if (!%comwaitintro) {
+  if (!%comwaitdiscord) {
     set -u15 %comwaitdiscord 1
-    msg $chan (⌐■_■)⌐ Join our Discord server! https://discord.gg/wW4axZp
+    msg $chan (⌐■_■)⌐ Join our Discord server for all info and discussions! http://discord.gg/wW4axZp
   }
 }
 
-on *:TEXT:!intro:*: {
-  if (!%comwaitintro) {
-    set -u15 %comwaitintro 1
-    msg $chan (⌐■_■)⌐ New to IWBTG fangames and curious about what you're watching? Head over to https://fangam.es/intro for a nice overview!
+on *:TEXT:!iwbtg:*: {
+  if (!%comwaitiwbtg) {
+    set -u15 %comwaitiwbtg 1
+    msg $chan (⌐■_■)⌐ New to IWBTG fangames and curious about what you're watching? Head over to http://fangam.es/intro for a nice overview!
   }
 }
 
 on *:TEXT:!jumps:*: {
   if (!%comwaitjumps) {
     set -u20 %comwaitjumps 1
-    msg $chan (⌐■_■)⌐ Here are a list of the major jumps used in fangames http://puu.sh/k8lSk/4678139789.png
+    msg $chan (⌐■_■)⌐ Here are a list of the major jumps used in IWBTG fangames http://fangam.es/jumps
+  }
+}
+
+on *:TEXT:!clip:*: {
+  if (!%comwaitclips) {
+    set -u20 %comwaitclips 1
+    msg $chan (⌐■_■)⌐ If there's a great moment on stream, clip it and put it in our !Discord server. You will be credited if your clip makes it into the FM2021 highlight reel!
+  }
+}
+
+on *:TEXT:!social:*: {
+  if (!%comwaitsocial) {
+    set -u20 %comwaitsocial 1
+    msg $chan (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
+  }
+}
+
+on *:TEXT:!twitter:*: {
+  if (!%comwaittwitter) {
+    set -u20 %comwaittwitter 1
+    msg $chan (⌐■_■)⌐ Follow us on Twitter for updates about Fangame Marathon: http://twitter.com/FangameMarathon
+  }
+}
+
+on *:TEXT:!youtube:*: {
+  if (!%comwaityoutube) {
+    set -u20 %comwaityoutube 1
+    msg $chan (⌐■_■)⌐ Subscribe to our YouTube channel to catch past runs! http://www.youtube.com/fangamemarathon
+  }
+}
+
+on *:TEXT:!yt:*: {
+  if (!%comwaityoutube) {
+    set -u20 %comwaityoutube 1
+    msg $chan (⌐■_■)⌐ Subscribe to our YouTube channel to catch past runs! http://www.youtube.com/fangamemarathon
   }
 }
 
@@ -173,7 +137,7 @@ on *:TEXT:!jumps:*: {
 Alias game_alias {
   if (!%comwaitgame) {
     set -u20 %comwaitgame 1
-    set %url https://horaro.org/-/api/v1/schedules/3e11t8e3x52bgh7a8d/ticker
+    set %url https://horaro.org/-/api/v1/schedules/4211o6degx4bji7a30/ticker
     /JSONOpen -ud schedule %url
     var %game = $JSON(schedule, data, ticker, current, data, 0)
     $regex(game, %game, /\[(.+)(?=\])/)
@@ -210,9 +174,9 @@ on *:TEXT:!game:*: {
 on *:TEXT:!schedule:*: {
   if (!%comwaitschedule) {
     set -u20 %comwaitschedule 1
-    msg $chan (⌐■_■)⌐ Schedule: https://horaro.org/fm/2021
+    msg $chan (⌐■_■)⌐ Schedule: http://horaro.org/fm/2021
 
-    set %url https://horaro.org/-/api/v1/schedules/3e11t8e3x52bgh7a8d/ticker
+    set %url https://horaro.org/-/api/v1/schedules/4211o6degx4bji7a30/ticker
     /JSONOpen -ud schedule %url
     var %curr_game = $JSON(schedule, data, ticker, current, data, 0)
     var %curr_type = $JSON(schedule, data, ticker, current, data, 1)
@@ -256,7 +220,7 @@ on *:TEXT:!schedule:*: {
 
     set %glen $len(%game_parsed)
     if ( %glen == 0 ) {
-      msg $chan (⌐■﹏■) We're in between games!
+      ;msg $chan (⌐■﹏■) We're in between games!
     }
     else {
       msg $chan (⌐■_■)⌐ Current run: %game_parsed %curr_type by %name_parsed
@@ -267,7 +231,6 @@ on *:TEXT:!schedule:*: {
 on *:TEXT:!next:*: {
   if (!%comwaitnext) {
     set -u20 %comwaitnext 1
-    ;  set %url https://horaro.org/-/api/v1/events/testschedulemike/schedules/schedule/ticker
     set %url https://horaro.org/-/api/v1/schedules/4211o6degx4bji7a30/ticker
     /JSONOpen -ud schedule %url
 
@@ -276,7 +239,7 @@ on *:TEXT:!next:*: {
     var %next_type = $JSON(schedule, data, ticker, next, data, 1)
     var %next_name = $JSON(schedule, data, ticker, next, data, 3)
 
-    ;  msg $chan Current run: %game %type by %name
+    ;  msg $chan Current run: %next_game %next_type by %next_name
     $regex(game, %next_game, /\[(.*?)\]/)
     if ($regml(game, 0) > 0) {
       set %game_parsed $regml(game, 1)
@@ -343,7 +306,7 @@ on *:TEXT:!next:*: {
 on *:TEXT:!a_delete:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon) {
     unset %admins
-    msg $chan /me ( •_•)>⌐■-■ Admins deleted.
+    msg $chan ( •_•)>⌐■-■ Admins deleted.
   }
 }
 
@@ -353,18 +316,64 @@ on *:TEXT:!a_create:*: {
     set %admins. $+ wolsk true
     set %admins. $+ denferok true
     set %admins. $+ fangamemarathon true
-    msg $chan /me (⌐■_■)⌐ Admins added.
+    msg $chan (⌐■_■)⌐ Admins added.
   }
 }
 
 on *:TEXT:!a_check:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon) {
     if ( %admins. [ $+ [ $nick ] ] ) {
-      msg $chan /me (⌐■_■)⌐ %admins. $+ $nick is an admin
+      msg $chan (⌐■_■)⌐ %admins. $+ $nick is an admin
     }
     else {
-      msg $chan /me (⌐■﹏■) %admins. $+ $nick is not an admin
+      msg $chan (⌐■﹏■) %admins. $+ $nick is not an admin
     }
+  }
+}
+
+/*
+--Update Twitch Info--
+*/
+
+on *:TEXT:!update *:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == joshua_boring || $nick == wolsk || $nick == denferok || $nick == cakesauc3 || $nick == krakkacafe || $nick == piranhatooth || $nick == pieceofcheese87 || $nick == artardss || $nick == naloas || $nick == pandy49  || $nick == onychu) {
+    set %url https://horaro.org/-/api/v1/schedules/4211o6degx4bji7a30/ticker
+
+    /JSONOpen -ud schedule %url
+    var %curr_game = $JSON(schedule, data, ticker, $2, data, 0)
+    var %curr_type = $JSON(schedule, data, ticker, $2, data, 1)
+    var %curr_name = $JSON(schedule, data, ticker, $2, data, 3)
+
+    var %next_game = $JSON(schedule, data, ticker, next, data, 0)
+    var %next_type = $JSON(schedule, data, ticker, next, data, 1)
+    var %next_name = $JSON(schedule, data, ticker, next, data, 3)
+
+    msg $chan Current run: %curr_game %curr_type by %curr_name
+    msg $chan next run: %next_game %next_type by %next_name
+
+    $regex(name, %curr_name, /twitch.tv/([a-zA-Z0-9|_]+)/g)
+
+    if ($regml(name, 0) > 1) {
+      $regex(link, %curr_name, /twitch.tv/([a-zA-Z0-9|_]+)/g)
+      set %names $regml(name, 0) + 1
+      set %pos 1
+      set %name_parsed
+      while (%pos < %names) {
+        set %name_parsed %name_parsed $regml(link, %pos)
+        set %sum %names - %pos
+        set %pos %pos + 1
+      }
+    }
+    else if ($regml(name, 0) > 0) {
+      $regex(link, %curr_name, /twitch.tv/([a-zA-Z0-9|_]+)/)
+      set %name_parsed $regml(link, 1)
+
+    }
+    else {
+      set %name_parsed %curr_name
+    }
+    ;set %followerUrl https://api.furious.pro/featuredchannels/bot/ab8b468a5808ac206f12cbc7d80af868:90780102/%name_parsed
+    ;/JSONOpen -ud schedule %followerUrl
   }
 }
 
@@ -392,7 +401,7 @@ Alias top_votes {
     inc %ix
   }
   ;      msg $chan /w shadowsdieaway Top X: %top_x with %top_x_n
-  msg $chan /me (⌐■_■)⌐ Top X: %top_x with %top_x_n vote(s)
+  msg $chan (⌐■_■)⌐ Top X: %top_x with %top_x_n vote(s)
   while ($hget(votes_y, %iy).item) {
     set %vy $v1
     if ($hget(votes_y, %vy) > %top_y_n) {
@@ -405,7 +414,7 @@ Alias top_votes {
     inc %iy
   }
   ;      msg $chan /w shadowsdieaway Top Y: %top_y with %top_y_n
-  msg $chan /me (⌐■_■)⌐ Top Y: %top_y with %top_y_n vote(s)
+  msg $chan (⌐■_■)⌐ Top Y: %top_y with %top_y_n vote(s)
   unset %ix
   unset %iy
   unset %vx
@@ -430,8 +439,8 @@ Alias top_votes_list {
     set %top_y_list %top_y_list %vy ( $+ $hget(votes_y, %vy) $+ )
     inc %iy
   }
-  msg $chan /me (⌐■_■)⌐ %top_x_list
-  msg $chan /me (⌐■_■)⌐ %top_y_list
+  msg $chan (⌐■_■)⌐ %top_x_list
+  msg $chan (⌐■_■)⌐ %top_y_list
   unset %ix
   unset %iy
   unset %vx
@@ -450,7 +459,7 @@ Alias top_votes_list_percentage {
     inc %i
     if ($hget(votes, %i).item) { set %top_list %top_list $+ , }
   }
-  msg $chan /me (⌐■_■)⌐ %top_list
+  msg $chan (⌐■_■)⌐ %top_list
   unset %i
   unset %v
   unset %top_list
@@ -458,14 +467,14 @@ Alias top_votes_list_percentage {
 
 on *:TEXT:!vote help:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == pieceofcheese87) {
-    msg $chan /me (⌐■_■)つ v_create: creates the voting system. v_delete: deletes the voting system. v_reset: reset all votes. v_info [top|list|users]: top votes|list all votes|list all users with their votes. v_check [*user]: check a specific user's vote. v_start: start the voting. vote [x] [y]: vote!
+    msg $chan (⌐■_■)つ v_create: creates the voting system. v_delete: deletes the voting system. v_reset: reset all votes. v_info [top|list|users]: top votes|list all votes|list all users with their votes. v_check [*user]: check a specific user's vote. v_start: start the voting. vote [x] [y]: vote!
   }
   else {
     if (!%comwait) {
       set -u10 %comwait 1
-      msg $chan /me (つ■_■)つ┌┬┐ When voting is open type "!vote [letter]"
-      msg $chan /me (つ■_■)つ├┼┤ You can vote A through Y
-      msg $chan /me (つ■_■)つ└┴┘ Lowercase or uppercase does not matter
+      msg $chan (つ■_■)つ┌┬┐ When voting is open type "!vote [letter]"
+      msg $chan (つ■_■)つ├┼┤ You can vote A through Y
+      msg $chan (つ■_■)つ└┴┘ Lowercase or uppercase does not matter
     }
   }
 }
@@ -478,7 +487,7 @@ on *:TEXT:!v_create:*: {
     set %runnerB
     hmake votes
     hmake votes_u
-    msg $chan /me (⌐■_■)⌐ Voting system created.
+    msg $chan (⌐■_■)⌐ Voting system created.
   }
 }
 
@@ -489,7 +498,7 @@ on *:TEXT:!v_delete:*: {
     set %v_system false
     hfree votes
     hfree votes_u
-    msg $chan /me ( •_•)>⌐■-■ Voting system has been deleted.
+    msg $chan ( •_•)>⌐■-■ Voting system has been deleted.
   }
 }
 
@@ -501,7 +510,7 @@ on *:TEXT:!v_reset:*: {
     hfree votes_u
     hmake votes
     hmake votes_u
-    msg $chan /me (⌐■_■)⌐ The vote count has been reset to $var(%u.*) $+ .
+    msg $chan (⌐■_■)⌐ The vote count has been reset to $var(%u.*) $+ .
   }
 }
 
@@ -509,7 +518,7 @@ on *:TEXT:!v_info *:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == pieceofcheese87) {
     set %num 0
     if ($var(%u.*) == 0) {
-      msg $chan /me (⌐■﹏■) No one has voted yet.
+      msg $chan (⌐■﹏■) No one has voted yet.
     }
     else if ($2 == top) {
       top_votes
@@ -518,7 +527,7 @@ on *:TEXT:!v_info *:*: {
       top_votes_list_percentage
     }
     else if ($2 == users) {
-      set %vote_list /me (⌐■_■)⌐ Total users that voted: $var(%u.*) -
+      set %vote_list (⌐■_■)⌐ Total users that voted: $var(%u.*) -
       while (%num < $var(%u.*)) {
         %num = %num + 1
         set %user $right($var(%u.*,%num),-3)
@@ -536,10 +545,10 @@ on *:TEXT:!v_info *:*: {
 on *:TEXT:!v_check *:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == pieceofcheese87) {
     if ( %u. [ $+ [ $2 ] ] ) {
-      msg $chan /me (⌐■_■)⌐ %u. $+ $2 has voted $hget( votes_u, $2 )
+      msg $chan (⌐■_■)⌐ %u. $+ $2 has voted $hget( votes_u, $2 )
     }
     else {
-      msg $chan /me (⌐■﹏■) %u. $+ $2 has not voted yet.
+      msg $chan (⌐■﹏■) %u. $+ $2 has not voted yet.
     }
   }
 }
@@ -547,36 +556,36 @@ on *:TEXT:!v_check *:*: {
 on *:TEXT:!v_set_runners *:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == pieceofcheese87) {
     set %runnerA $2
-    msg $chan /me (⌐■_■)⌐ A votes set to $2
+    msg $chan (⌐■_■)⌐ A votes set to $2
     set %runnerB $3
-    msg $chan /me (⌐■_■)⌐ B votes set to $3
+    msg $chan (⌐■_■)⌐ B votes set to $3
   }
 }
 
 on *:TEXT:!v_start:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == pieceofcheese87) {
     set %v_open true
-    msg $chan /me (⌐■_■)⌐ Voting is open for 30 seconds!
+    msg $chan (⌐■_■)⌐ Voting is open for 30 seconds!
 
 
-    timer 1 10 msg $chan /me (⌐■_■)⌐ 20 seconds remaining!
-    timer 1 20 msg $chan /me (⌐■_■)⌐ 10 seconds remaining!
-    timer 1 25 msg $chan /me (⌐■_■)⌐ 5 seconds remaining!
+    timer 1 10 msg $chan (⌐■_■)⌐ 20 seconds remaining!
+    timer 1 20 msg $chan (⌐■_■)⌐ 10 seconds remaining!
+    timer 1 25 msg $chan (⌐■_■)⌐ 5 seconds remaining!
     timer 1 30 set %v_open false
-    timer 1 30 msg $chan /me (⌐■_■)⌐ Voting is now closed!
+    timer 1 30 msg $chan (⌐■_■)⌐ Voting is now closed!
   }
 }
 
 on *:TEXT:!vote *:*: {
   set %user_vote $upper( $2 )
   if (%v_system == false) {
-    ;      msg $chan /me (⌐■﹏■) Sorry we're not voting now!
+    ;      msg $chan (⌐■﹏■) Sorry we're not voting now!
   }
   else if (%v_open == false) {
-    ;      msg $chan /me (⌐■﹏■) Sorry $nick voting is closed.
+    ;      msg $chan (⌐■﹏■) Sorry $nick voting is closed.
   }
   else if (%u. [ $+ [ $nick ] ] ) {
-    msg $chan /me (⌐■﹏■) Sorry $nick you already voted $hget( votes_u, $nick )
+    msg $chan (⌐■﹏■) Sorry $nick you already voted $hget( votes_u, $nick )
   }
   else if ( %user_vote == A || %user_vote == B || %user_vote == C || %user_vote == D || %user_vote == E || %user_vote == F || %user_vote == G || %user_vote == H || %user_vote == I || %user_vote == J || %user_vote == K || %user_vote == L || %user_vote == M || %user_vote == N || %user_vote == O || %user_vote == P || %user_vote == Q || %user_vote == R || %user_vote == S || %user_vote == T || %user_vote == U || %user_vote == V || %user_vote == W || %user_vote == X || %user_vote == Y) {
     set %u. $+ $nick true
@@ -585,10 +594,10 @@ on *:TEXT:!vote *:*: {
     else { set %num 1 }
     hadd votes $2 %num
     unset %num
-    ;    msg $chan /me (⌐■_■)⌐ $nick voted $2 Current vote(s): $var(%u.*) $+ .
+    ;    msg $chan (⌐■_■)⌐ $nick voted $2 Current vote(s): $var(%u.*) $+ .
   }
   else {
-    msg $chan /me (⌐■﹏■) $nick your vote must A through Y (upper or lowercase). Please try again.
+    msg $chan (⌐■﹏■) $nick your vote must A through Y (upper or lowercase). Please try again.
   }
 }
 

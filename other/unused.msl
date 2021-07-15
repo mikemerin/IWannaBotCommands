@@ -68,6 +68,38 @@ on *:TEXT:!current *:*: {
   msg $chan Current run: %game_parsed %type by %name_parsed
 }
 
+/*
+--Older COmmands--
+*/
+
+on *:TEXT:!fangame*:*: {
+  if (!%comwaitfangame) {
+    set -u15 %comwaitfangame 1
+    msg $chan (⌐■_■)⌐ To download some fangames visit https://fangam.es and search our immense list of free games! To learn more about fangames type !intro
+  }
+}
+
+
+
+/*
+--Old Timers (noticed the double meaning after I already typed this)--
+*/
+
+alias rFollow {
+  /timerfollow 0 660 msg $chan /me (⌐■_■)⌐ Enjoying the run? Be sure to follow the runner(s) by clicking the relevant FFZ follow buttons below the stream!
+}
+
+alias rDiscord {
+  /timerdiscord 0 840 msg $chan /me (⌐■_■)⌐ Join our Discord server! https://discord.gg/wW4axZp
+}
+
+alias rIntro {
+  /timersintro 0 1020 msg $chan /me (⌐■_■)⌐ New to IWBTG fangames and curious about what you're watching? Head over to https://fangam.es/intro for a nice overview!
+}
+
+alias rFangame {
+  /timerfangame 0 1140 msg $chan /me (⌐■_■)⌐ To download some fangames visit https://fangam.es and search our immense list of free games! To learn more about fangames type !intro
+}
 
 
 
