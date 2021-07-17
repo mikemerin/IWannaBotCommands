@@ -5,14 +5,14 @@
 on *:TEXT:!commands:*: {
   if (!%comwaitcommands) {
     set -u15 %comwaitcommands 1
-    msg $chan (⌐■_■)⌐ The commands you can use are: !discord !iwbtg !jumps !game !schedule !next !clip !social !twitter !youtube !yt
+    msg $chan (⌐■_■)⌐ The commands you can use are: !discord !iwbtg !jumps !game !follow !schedule !next !clip !social !twitter !youtube !yt !playlist
   }
 }
 
 on *:TEXT:!help:*: {
   if (!%comwaitcommands) {
     set -u15 %comwaitcommands 1
-    msg $chan (⌐■_■)⌐ The commands you can use are: !discord !iwbtg !jumps !game !schedule !next !clip !social !twitter !youtube !yt
+    msg $chan (⌐■_■)⌐ The commands you can use are: !discord !iwbtg !jumps !game !follow !schedule !next !clip !social !twitter !youtube !yt !playlist
   }
 }
 
@@ -25,8 +25,9 @@ on *:TEXT:!repeat_on:*: {
   ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
   if ($nick == shadowsdieaway || $nick == fangamemarathon) {
     msg $chan (⌐■_■)⌐ Repeated commands loaded!
-    timer 1 5 rClip
-    timer 1 455 rSocial
+    timer 1 5 rFollow
+    timer 1 305 rSocial
+    timer 1 605 rClip
   }
 }
 
@@ -34,6 +35,7 @@ on *:TEXT:!repeat_off:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon) {
     /timerclip off
     /timersocial off
+    /timerfollow off
     msg $chan ( •_•)>⌐■-■ Repeated commands are now off.
   }
 }
@@ -54,17 +56,25 @@ on *:TEXT:!repeat_clip:*: {
 }
 
 alias rSocial {
-  ;/timersocial 0 900 msg $chan (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
-  ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
   /timersocial 0 900 msg #fangamemarathon (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
 }
 
 on *:TEXT:!repeat_social:*: {
   if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == iwannabot) {
-    ;msg $chan (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
-    ; somehow with this, $chan is empty so it's messaging the 'tmi iwannabot' chat, not the channel I'm in
     msg #fangamemarathon (⌐■_■)⌐ Discord: http://discord.gg/wW4axZp || Twitter: http://twitter.com/FangameMarathon || YouTube: http://www.youtube.com/fangamemarathon
     rSocial
+  }
+}
+
+alias rFollow {
+  /timerfollow 0 900 msg #fangamemarathon (⌐■_■)⌐ Make sure you use the on-screen overlay to follow the runners and commentators for each run!
+}
+
+on *:TEXT:!repeat_follow:*: {
+  if ($nick == shadowsdieaway || $nick == fangamemarathon || $nick == iwannabot) {
+    msg #fangamemarathon (⌐■_■)⌐ Make sure you use the on-screen overlay to follow the runners and commentators for each run!
+    rFollow
+
   }
 }
 
@@ -101,6 +111,13 @@ on *:TEXT:!clip:*: {
   }
 }
 
+on *:TEXT:!follow:*: {
+  if (!%comwaitfollow) {
+    set -u20 %comwaitfollow1
+    msg $chan (⌐■_■)⌐ Make sure you use the on-screen overlay to follow the runners and commentators for each run!
+  }
+}
+
 on *:TEXT:!social:*: {
   if (!%comwaitsocial) {
     set -u20 %comwaitsocial 1
@@ -126,6 +143,13 @@ on *:TEXT:!yt:*: {
   if (!%comwaityoutube) {
     set -u20 %comwaityoutube 1
     msg $chan (⌐■_■)⌐ Subscribe to our YouTube channel to catch past runs! http://www.youtube.com/fangamemarathon
+  }
+}
+
+on *:TEXT:!playlist:*: {
+  if (!%comwaitplaylist) {
+    set -u20 %comwaitplaylist 1
+    msg $chan (⌐■_■)⌐ Enjoying the music between games? Here's the official Fangame Marathon playlist! http://cosmoing.github.io/fm-playlist/
   }
 }
 
